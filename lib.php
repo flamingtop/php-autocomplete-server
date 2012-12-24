@@ -154,6 +154,7 @@ abstract class Index implements IndexStore
      * @return array
      */
     public function byKey($key, $scores=false) {
+        $key = $this->getContext() . $key;
         $items = $this->load($key);
         if(!is_array($items)) {
             return false;
