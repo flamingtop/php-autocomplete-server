@@ -156,6 +156,10 @@ abstract class Index implements IndexStore
         if(!is_array($items)) {
             return false;
         }
+        usort($items, function($a, $b) {
+            if ($a == $b) return 0;
+            return ($a < $b) ? 1 : -1;
+        });
         return $scores ? $items : array_keys($items);
     }
 
