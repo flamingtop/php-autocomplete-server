@@ -77,7 +77,7 @@ abstract class Index implements IndexStore
             is_string($word)
                 && $this->addWord($word);
             is_array($word)
-                && $this->addWord(key($word), $word[key($word)]);
+                && $this->addWord($word[0], $word[1]);
         }
     }
 
@@ -93,11 +93,11 @@ abstract class Index implements IndexStore
      * @param array $words An array of UTF-8 encoded words
      */
     public function addWordsToWord($indexWord, $words) {
-        foreach($words as $k=>$v) {
-            is_numeric($k)
+        foreach($words as $v) {
+            is_string($v)
                 && $this->addWordToWord($indexWord, $v);
-            is_string($k)
-                && $this->addWordToWord($indexWord, $k, $v);
+            is_array($v)
+                && $this->addWordToWord($indexWord, $v[0], $v[1]);
         }
     }
     
@@ -125,10 +125,7 @@ abstract class Index implements IndexStore
      * @param string $indexWord
      */
     public function addWordToWord($indexWord, $word, $score=0) {
-        $rindex = $this->getReverseIndexKeys($indexWord);
-        foreach ($rindex as $key) {
-            $this->indexWordByWord($indexWord, $word, $score);
-        }
+        $this->indexWordByWord($indexWord, $word, $score);
     }
 
 
