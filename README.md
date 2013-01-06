@@ -1,5 +1,8 @@
 # PHP Auto-complete Server
 
+        HTTP: http://domain/index.php?word=earth
+        CLI : php index.php --word=earth
+        
 * Index a word (utf-8 encoded)
   
     English
