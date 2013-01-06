@@ -4,13 +4,6 @@
  * @file
  * The Completer
  *
- * Use via HTTP
- *   /?key=h
- *   /?key=h&context=..
- *
- * Use via CLI
- *   php complete.php --key=h
- *   php complete.php --key=h --context=..
  */
 
 require_once("config.php");

@@ -105,10 +105,14 @@ abstract class Index implements IndexStore
     /**
      * Add an UTF-8 encoded word into the index
      *
-     * @param string $word @see index()
-     * @score int $score @see index()
+     * @param string|array $word
+     * @score int $score
      */
     public function addWord($word, $score=0) {
+        if (is_array($word)) {
+            $this->addWord($word[0], $word[1]);
+            return;
+        }
         $rindex = $this->getReverseIndexKeys($word);
         foreach ($rindex as $key) {
             $this->indexWordByKey($key, $word, $score);
@@ -121,10 +125,14 @@ abstract class Index implements IndexStore
      *
      * @see indexWordByWord()
      *
-     * @param string $word 
+     * @param string|array $word 
      * @param string $indexWord
      */
     public function addWordToWord($indexWord, $word, $score=0) {
+        if (is_array($word)) {
+            $this->addWordToWord($indexWord, $word[0], $word[1]);
+            return;
+        }
         $this->indexWordByWord($indexWord, $word, $score);
     }
 
@@ -156,9 +164,9 @@ abstract class Index implements IndexStore
         if(!is_array($items)) {
             return false;
         }
-        usort($items, function($a, $b) {
-            if ($a == $b) return 0;
-            return ($a < $b) ? 1 : -1;
+        uasort($items, function($a, $b) {
+                if ($a == $b) return 0;
+                return ($a < $b) ? 1 : -1;
         });
         return $scores ? $items : array_keys($items);
     }
@@ -191,10 +199,8 @@ abstract class Index implements IndexStore
      */  
     protected function indexWordByKey($key, $word, $score=0) {
         $items = $this->load($key);
-        isset($items)
-            || $items = array();
-        isset($items[$word])
-            || $items[$word] = $score;
+        isset($items) || $items = array();
+        $items[$word] = $score;
         return $this->save($key, $items);
     }
 
